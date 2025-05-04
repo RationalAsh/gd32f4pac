@@ -1,6 +1,6 @@
 [package]
 edition = "2018"
-name = "gd32f4"
+name = "gd32f4pac"
 version = "0.9.1"
 authors = ["Ashwin Narayan <ashwinnarayan1994@gmail.com>", "Andrew Walbran <qwandor@gmail.com>", "gd32-rs Contributors"]
 description = "Device support crate for GD32F4 devices"

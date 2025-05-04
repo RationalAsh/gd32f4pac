@@ -66,7 +66,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gd32f4"
+name = "gd32f4pac"
 version = "0.9.1"
 dependencies = [
  "cortex-m",
