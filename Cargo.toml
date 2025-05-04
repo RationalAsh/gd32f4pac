@@ -9,6 +9,7 @@ readme = "README.md"
 keywords = ["gd32", "svd2rust", "no_std", "embedded"]
 categories = ["embedded", "no-std"]
 license = "MIT OR Apache-2.0"
+exclude = ["update_repo.sh"]
 
 [dependencies]
 vcell = "0.1.3"
