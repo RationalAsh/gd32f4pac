@@ -93009,7 +93009,7 @@ pub mod timer1 {
         dmainten: Dmainten,
         intf: Intf,
         swevg: Swevg,
-        _reserved_6_chctl0: [u8; 0x04],
+        _reserved_6_chctl: [u8; 0x04],
         _reserved_7_chctl1: [u8; 0x04],
         chctl2: Chctl2,
         cnt: Cnt,
@@ -93065,7 +93065,7 @@ pub mod timer1 {
         }
         #[doc = "0x18 - Channel control register 0 (output mode)"]
         #[inline(always)]
-        pub const fn chctl0_output(&self) -> &Chctl0Output {
+        pub const fn chctl0(&self) -> &Chctl0 {
             unsafe { &*core::ptr::from_ref(self).cast::<u8>().add(24).cast() }
         }
         #[doc = "0x1c - Channel control register 1 (input mode)"]
@@ -94033,22 +94033,577 @@ pub mod timer1 {
         pub type R = crate::R<SmcfgSpec>;
         #[doc = "Register `SMCFG` writer"]
         pub type W = crate::W<SmcfgSpec>;
+        #[doc = "Slave mode control\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Smc {
+            #[doc = "0: Slave mode disabled."]
+            Disabled = 0,
+            #[doc = "1: Quadrature decoder mode 0.The counter counts on CI0FE0 edge, while the direction depends on CI1FE1 level."]
+            EncoderMode1 = 1,
+            #[doc = "2: Quadrature decoder mode 1.The counter counts on CI1FE1 edge, while the direction depends on CI0FE0 level."]
+            EncoderMode2 = 2,
+            #[doc = "3: Quadrature decoder mode 2.The counter counts on both CI0FE0 and CI1FE1 edge, while the direction depends on each other."]
+            EncoderMode3 = 3,
+            #[doc = "4: Restart mode. The counter is reinitialized and an update event is generated on the rising edge of the selected trigger input."]
+            RestartMode = 4,
+            #[doc = "5: Pause mode. The trigger input enables the counter clock when it is high and disables the counter clock when it is low."]
+            PauseMode = 5,
+            #[doc = "6: Event mode. A rising edge of the trigger input enables the counter."]
+            TriggerMode = 6,
+            #[doc = "7: External clock mode 0. The counter counts on the rising edges of the selected trigger."]
+            ExternalClockMode1 = 7,
+        }
+        impl From<Smc> for u8 {
+            #[inline(always)]
+            fn from(variant: Smc) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Smc {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Smc {}
         #[doc = "Field `SMC` reader - Slave mode control"]
-        pub type SmcR = crate::FieldReader;
+        pub type SmcR = crate::FieldReader<Smc>;
+        impl SmcR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Smc {
+                match self.bits {
+                    0 => Smc::Disabled,
+                    1 => Smc::EncoderMode1,
+                    2 => Smc::EncoderMode2,
+                    3 => Smc::EncoderMode3,
+                    4 => Smc::RestartMode,
+                    5 => Smc::PauseMode,
+                    6 => Smc::TriggerMode,
+                    7 => Smc::ExternalClockMode1,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Slave mode disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Smc::Disabled
+            }
+            #[doc = "Quadrature decoder mode 0.The counter counts on CI0FE0 edge, while the direction depends on CI1FE1 level."]
+            #[inline(always)]
+            pub fn is_encoder_mode1(&self) -> bool {
+                *self == Smc::EncoderMode1
+            }
+            #[doc = "Quadrature decoder mode 1.The counter counts on CI1FE1 edge, while the direction depends on CI0FE0 level."]
+            #[inline(always)]
+            pub fn is_encoder_mode2(&self) -> bool {
+                *self == Smc::EncoderMode2
+            }
+            #[doc = "Quadrature decoder mode 2.The counter counts on both CI0FE0 and CI1FE1 edge, while the direction depends on each other."]
+            #[inline(always)]
+            pub fn is_encoder_mode3(&self) -> bool {
+                *self == Smc::EncoderMode3
+            }
+            #[doc = "Restart mode. The counter is reinitialized and an update event is generated on the rising edge of the selected trigger input."]
+            #[inline(always)]
+            pub fn is_restart_mode(&self) -> bool {
+                *self == Smc::RestartMode
+            }
+            #[doc = "Pause mode. The trigger input enables the counter clock when it is high and disables the counter clock when it is low."]
+            #[inline(always)]
+            pub fn is_pause_mode(&self) -> bool {
+                *self == Smc::PauseMode
+            }
+            #[doc = "Event mode. A rising edge of the trigger input enables the counter."]
+            #[inline(always)]
+            pub fn is_trigger_mode(&self) -> bool {
+                *self == Smc::TriggerMode
+            }
+            #[doc = "External clock mode 0. The counter counts on the rising edges of the selected trigger."]
+            #[inline(always)]
+            pub fn is_external_clock_mode1(&self) -> bool {
+                *self == Smc::ExternalClockMode1
+            }
+        }
         #[doc = "Field `SMC` writer - Slave mode control"]
-        pub type SmcW<'a, REG> = crate::FieldWriter<'a, REG, 3>;
+        pub type SmcW<'a, REG> = crate::FieldWriter<'a, REG, 3, Smc, crate::Safe>;
+        impl<'a, REG> SmcW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "Slave mode disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::Disabled)
+            }
+            #[doc = "Quadrature decoder mode 0.The counter counts on CI0FE0 edge, while the direction depends on CI1FE1 level."]
+            #[inline(always)]
+            pub fn encoder_mode1(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::EncoderMode1)
+            }
+            #[doc = "Quadrature decoder mode 1.The counter counts on CI1FE1 edge, while the direction depends on CI0FE0 level."]
+            #[inline(always)]
+            pub fn encoder_mode2(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::EncoderMode2)
+            }
+            #[doc = "Quadrature decoder mode 2.The counter counts on both CI0FE0 and CI1FE1 edge, while the direction depends on each other."]
+            #[inline(always)]
+            pub fn encoder_mode3(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::EncoderMode3)
+            }
+            #[doc = "Restart mode. The counter is reinitialized and an update event is generated on the rising edge of the selected trigger input."]
+            #[inline(always)]
+            pub fn restart_mode(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::RestartMode)
+            }
+            #[doc = "Pause mode. The trigger input enables the counter clock when it is high and disables the counter clock when it is low."]
+            #[inline(always)]
+            pub fn pause_mode(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::PauseMode)
+            }
+            #[doc = "Event mode. A rising edge of the trigger input enables the counter."]
+            #[inline(always)]
+            pub fn trigger_mode(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::TriggerMode)
+            }
+            #[doc = "External clock mode 0. The counter counts on the rising edges of the selected trigger."]
+            #[inline(always)]
+            pub fn external_clock_mode1(self) -> &'a mut crate::W<REG> {
+                self.variant(Smc::ExternalClockMode1)
+            }
+        }
+        #[doc = "Trigger selection\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Trgs {
+            #[doc = "0: Trigger input is ITI0."]
+            Iti0 = 0,
+            #[doc = "1: Trigger input is ITI1."]
+            Iti1 = 1,
+            #[doc = "2: Trigger input is ITI2."]
+            Iti2 = 2,
+            #[doc = "3: Trigger input is ITI3."]
+            Iti3 = 3,
+            #[doc = "4: Trigger input is CI0F_EDGE."]
+            Ci0fEdge = 4,
+            #[doc = "5: Trigger input is CI0FE0."]
+            Ci0fe0 = 5,
+            #[doc = "6: Trigger input is CI1FE1."]
+            Ci1fe1 = 6,
+            #[doc = "7: Trigger input is ETIFP."]
+            Etifp = 7,
+        }
+        impl From<Trgs> for u8 {
+            #[inline(always)]
+            fn from(variant: Trgs) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Trgs {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Trgs {}
         #[doc = "Field `TRGS` reader - Trigger selection"]
-        pub type TrgsR = crate::FieldReader;
+        pub type TrgsR = crate::FieldReader<Trgs>;
+        impl TrgsR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Trgs {
+                match self.bits {
+                    0 => Trgs::Iti0,
+                    1 => Trgs::Iti1,
+                    2 => Trgs::Iti2,
+                    3 => Trgs::Iti3,
+                    4 => Trgs::Ci0fEdge,
+                    5 => Trgs::Ci0fe0,
+                    6 => Trgs::Ci1fe1,
+                    7 => Trgs::Etifp,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Trigger input is ITI0."]
+            #[inline(always)]
+            pub fn is_iti0(&self) -> bool {
+                *self == Trgs::Iti0
+            }
+            #[doc = "Trigger input is ITI1."]
+            #[inline(always)]
+            pub fn is_iti1(&self) -> bool {
+                *self == Trgs::Iti1
+            }
+            #[doc = "Trigger input is ITI2."]
+            #[inline(always)]
+            pub fn is_iti2(&self) -> bool {
+                *self == Trgs::Iti2
+            }
+            #[doc = "Trigger input is ITI3."]
+            #[inline(always)]
+            pub fn is_iti3(&self) -> bool {
+                *self == Trgs::Iti3
+            }
+            #[doc = "Trigger input is CI0F_EDGE."]
+            #[inline(always)]
+            pub fn is_ci0f_edge(&self) -> bool {
+                *self == Trgs::Ci0fEdge
+            }
+            #[doc = "Trigger input is CI0FE0."]
+            #[inline(always)]
+            pub fn is_ci0fe0(&self) -> bool {
+                *self == Trgs::Ci0fe0
+            }
+            #[doc = "Trigger input is CI1FE1."]
+            #[inline(always)]
+            pub fn is_ci1fe1(&self) -> bool {
+                *self == Trgs::Ci1fe1
+            }
+            #[doc = "Trigger input is ETIFP."]
+            #[inline(always)]
+            pub fn is_etifp(&self) -> bool {
+                *self == Trgs::Etifp
+            }
+        }
         #[doc = "Field `TRGS` writer - Trigger selection"]
-        pub type TrgsW<'a, REG> = crate::FieldWriter<'a, REG, 3>;
+        pub type TrgsW<'a, REG> = crate::FieldWriter<'a, REG, 3, Trgs, crate::Safe>;
+        impl<'a, REG> TrgsW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "Trigger input is ITI0."]
+            #[inline(always)]
+            pub fn iti0(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Iti0)
+            }
+            #[doc = "Trigger input is ITI1."]
+            #[inline(always)]
+            pub fn iti1(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Iti1)
+            }
+            #[doc = "Trigger input is ITI2."]
+            #[inline(always)]
+            pub fn iti2(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Iti2)
+            }
+            #[doc = "Trigger input is ITI3."]
+            #[inline(always)]
+            pub fn iti3(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Iti3)
+            }
+            #[doc = "Trigger input is CI0F_EDGE."]
+            #[inline(always)]
+            pub fn ci0f_edge(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Ci0fEdge)
+            }
+            #[doc = "Trigger input is CI0FE0."]
+            #[inline(always)]
+            pub fn ci0fe0(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Ci0fe0)
+            }
+            #[doc = "Trigger input is CI1FE1."]
+            #[inline(always)]
+            pub fn ci1fe1(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Ci1fe1)
+            }
+            #[doc = "Trigger input is ETIFP."]
+            #[inline(always)]
+            pub fn etifp(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgs::Etifp)
+            }
+        }
+        #[doc = "Master-slave mode\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Msm {
+            #[doc = "0: Master/slave mode disabled."]
+            Disabled = 0,
+            #[doc = "1: Master mode enabled."]
+            Master = 1,
+        }
+        impl From<Msm> for bool {
+            #[inline(always)]
+            fn from(variant: Msm) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `MSM` reader - Master-slave mode"]
-        pub type MsmR = crate::BitReader;
+        pub type MsmR = crate::BitReader<Msm>;
+        impl MsmR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Msm {
+                match self.bits {
+                    false => Msm::Disabled,
+                    true => Msm::Master,
+                }
+            }
+            #[doc = "Master/slave mode disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Msm::Disabled
+            }
+            #[doc = "Master mode enabled."]
+            #[inline(always)]
+            pub fn is_master(&self) -> bool {
+                *self == Msm::Master
+            }
+        }
         #[doc = "Field `MSM` writer - Master-slave mode"]
-        pub type MsmW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type MsmW<'a, REG> = crate::BitWriter<'a, REG, Msm>;
+        impl<'a, REG> MsmW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Master/slave mode disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Msm::Disabled)
+            }
+            #[doc = "Master mode enabled."]
+            #[inline(always)]
+            pub fn master(self) -> &'a mut crate::W<REG> {
+                self.variant(Msm::Master)
+            }
+        }
+        #[doc = "External trigger filter control\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Etfc {
+            #[doc = "0: ETIFP filter disabled."]
+            Disabled = 0,
+            #[doc = "1: ETIFP filter capacity is 2, f_samp is fck_timer"]
+            Capacity1 = 1,
+            #[doc = "2: ETIFP filter capacity is 4, f_samp is fck_timer"]
+            Capacity2 = 2,
+            #[doc = "3: ETIFP filter capacity is 8, f_samp is fck_timer"]
+            Capacity3 = 3,
+            #[doc = "4: ETIFP filter capacity is 6, f_samp is fck_timer / 2"]
+            Capacity4 = 4,
+            #[doc = "5: ETIFP filter capacity is 8, f_samp is fck_timer / 2"]
+            Capacity5 = 5,
+            #[doc = "6: ETIFP filter capacity is 6, f_samp is fck_timer / 4"]
+            Capacity6 = 6,
+            #[doc = "7: ETIFP filter capacity is 8, f_samp is fck_timer / 4"]
+            Capacity7 = 7,
+            #[doc = "8: ETIFP filter capacity is 6, f_samp is fck_timer / 8"]
+            Capacity8 = 8,
+            #[doc = "9: ETIFP filter capacity is 8, f_samp is fck_timer / 8"]
+            Capacity9 = 9,
+            #[doc = "10: ETIFP filter capacity is 5, f_samp is fck_timer / 16"]
+            Capacity10 = 10,
+            #[doc = "11: ETIFP filter capacity is 6, f_samp is fck_timer / 16"]
+            Capacity11 = 11,
+            #[doc = "12: ETIFP filter capacity is 8, f_samp is fck_timer / 16"]
+            Capacity12 = 12,
+            #[doc = "13: ETIFP filter capacity is 5, f_samp is fck_timer / 32"]
+            Capacity13 = 13,
+            #[doc = "14: ETIFP filter capacity is 6, f_samp is fck_timer / 32"]
+            Capacity14 = 14,
+            #[doc = "15: ETIFP filter capacity is 8, f_samp is fck_timer / 32"]
+            Capacity15 = 15,
+        }
+        impl From<Etfc> for u8 {
+            #[inline(always)]
+            fn from(variant: Etfc) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Etfc {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Etfc {}
         #[doc = "Field `ETFC` reader - External trigger filter control"]
-        pub type EtfcR = crate::FieldReader;
+        pub type EtfcR = crate::FieldReader<Etfc>;
+        impl EtfcR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Etfc {
+                match self.bits {
+                    0 => Etfc::Disabled,
+                    1 => Etfc::Capacity1,
+                    2 => Etfc::Capacity2,
+                    3 => Etfc::Capacity3,
+                    4 => Etfc::Capacity4,
+                    5 => Etfc::Capacity5,
+                    6 => Etfc::Capacity6,
+                    7 => Etfc::Capacity7,
+                    8 => Etfc::Capacity8,
+                    9 => Etfc::Capacity9,
+                    10 => Etfc::Capacity10,
+                    11 => Etfc::Capacity11,
+                    12 => Etfc::Capacity12,
+                    13 => Etfc::Capacity13,
+                    14 => Etfc::Capacity14,
+                    15 => Etfc::Capacity15,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "ETIFP filter disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Etfc::Disabled
+            }
+            #[doc = "ETIFP filter capacity is 2, f_samp is fck_timer"]
+            #[inline(always)]
+            pub fn is_capacity1(&self) -> bool {
+                *self == Etfc::Capacity1
+            }
+            #[doc = "ETIFP filter capacity is 4, f_samp is fck_timer"]
+            #[inline(always)]
+            pub fn is_capacity2(&self) -> bool {
+                *self == Etfc::Capacity2
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer"]
+            #[inline(always)]
+            pub fn is_capacity3(&self) -> bool {
+                *self == Etfc::Capacity3
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 2"]
+            #[inline(always)]
+            pub fn is_capacity4(&self) -> bool {
+                *self == Etfc::Capacity4
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 2"]
+            #[inline(always)]
+            pub fn is_capacity5(&self) -> bool {
+                *self == Etfc::Capacity5
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 4"]
+            #[inline(always)]
+            pub fn is_capacity6(&self) -> bool {
+                *self == Etfc::Capacity6
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 4"]
+            #[inline(always)]
+            pub fn is_capacity7(&self) -> bool {
+                *self == Etfc::Capacity7
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 8"]
+            #[inline(always)]
+            pub fn is_capacity8(&self) -> bool {
+                *self == Etfc::Capacity8
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 8"]
+            #[inline(always)]
+            pub fn is_capacity9(&self) -> bool {
+                *self == Etfc::Capacity9
+            }
+            #[doc = "ETIFP filter capacity is 5, f_samp is fck_timer / 16"]
+            #[inline(always)]
+            pub fn is_capacity10(&self) -> bool {
+                *self == Etfc::Capacity10
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 16"]
+            #[inline(always)]
+            pub fn is_capacity11(&self) -> bool {
+                *self == Etfc::Capacity11
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 16"]
+            #[inline(always)]
+            pub fn is_capacity12(&self) -> bool {
+                *self == Etfc::Capacity12
+            }
+            #[doc = "ETIFP filter capacity is 5, f_samp is fck_timer / 32"]
+            #[inline(always)]
+            pub fn is_capacity13(&self) -> bool {
+                *self == Etfc::Capacity13
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 32"]
+            #[inline(always)]
+            pub fn is_capacity14(&self) -> bool {
+                *self == Etfc::Capacity14
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 32"]
+            #[inline(always)]
+            pub fn is_capacity15(&self) -> bool {
+                *self == Etfc::Capacity15
+            }
+        }
         #[doc = "Field `ETFC` writer - External trigger filter control"]
-        pub type EtfcW<'a, REG> = crate::FieldWriter<'a, REG, 4>;
+        pub type EtfcW<'a, REG> = crate::FieldWriter<'a, REG, 4, Etfc, crate::Safe>;
+        impl<'a, REG> EtfcW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "ETIFP filter disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Disabled)
+            }
+            #[doc = "ETIFP filter capacity is 2, f_samp is fck_timer"]
+            #[inline(always)]
+            pub fn capacity1(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity1)
+            }
+            #[doc = "ETIFP filter capacity is 4, f_samp is fck_timer"]
+            #[inline(always)]
+            pub fn capacity2(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity2)
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer"]
+            #[inline(always)]
+            pub fn capacity3(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity3)
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 2"]
+            #[inline(always)]
+            pub fn capacity4(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity4)
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 2"]
+            #[inline(always)]
+            pub fn capacity5(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity5)
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 4"]
+            #[inline(always)]
+            pub fn capacity6(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity6)
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 4"]
+            #[inline(always)]
+            pub fn capacity7(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity7)
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 8"]
+            #[inline(always)]
+            pub fn capacity8(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity8)
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 8"]
+            #[inline(always)]
+            pub fn capacity9(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity9)
+            }
+            #[doc = "ETIFP filter capacity is 5, f_samp is fck_timer / 16"]
+            #[inline(always)]
+            pub fn capacity10(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity10)
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 16"]
+            #[inline(always)]
+            pub fn capacity11(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity11)
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 16"]
+            #[inline(always)]
+            pub fn capacity12(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity12)
+            }
+            #[doc = "ETIFP filter capacity is 5, f_samp is fck_timer / 32"]
+            #[inline(always)]
+            pub fn capacity13(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity13)
+            }
+            #[doc = "ETIFP filter capacity is 6, f_samp is fck_timer / 32"]
+            #[inline(always)]
+            pub fn capacity14(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity14)
+            }
+            #[doc = "ETIFP filter capacity is 8, f_samp is fck_timer / 32"]
+            #[inline(always)]
+            pub fn capacity15(self) -> &'a mut crate::W<REG> {
+                self.variant(Etfc::Capacity15)
+            }
+        }
         #[doc = "External trigger prescaler\n\nValue on reset: 0"]
         #[derive(Clone, Copy, Debug, PartialEq, Eq)]
         #[repr(u8)]
@@ -94338,54 +94893,642 @@ pub mod timer1 {
         pub type R = crate::R<DmaintenSpec>;
         #[doc = "Register `DMAINTEN` writer"]
         pub type W = crate::W<DmaintenSpec>;
+        #[doc = "Update interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Upie {
+            #[doc = "0: Update interrupt disabled."]
+            Disabled = 0,
+            #[doc = "1: Update interrupt enabled."]
+            Enabled = 1,
+        }
+        impl From<Upie> for bool {
+            #[inline(always)]
+            fn from(variant: Upie) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `UPIE` reader - Update interrupt enable"]
-        pub type UpieR = crate::BitReader;
+        pub type UpieR = crate::BitReader<Upie>;
+        impl UpieR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Upie {
+                match self.bits {
+                    false => Upie::Disabled,
+                    true => Upie::Enabled,
+                }
+            }
+            #[doc = "Update interrupt disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Upie::Disabled
+            }
+            #[doc = "Update interrupt enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Upie::Enabled
+            }
+        }
         #[doc = "Field `UPIE` writer - Update interrupt enable"]
-        pub type UpieW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type UpieW<'a, REG> = crate::BitWriter<'a, REG, Upie>;
+        impl<'a, REG> UpieW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Update interrupt disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Upie::Disabled)
+            }
+            #[doc = "Update interrupt enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Upie::Enabled)
+            }
+        }
+        #[doc = "Channel 0 capture/compare interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0ie {
+            #[doc = "0: Channel 0 capture/compare interrupt disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 0 capture/compare interrupt enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch0ie> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0ie) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0IE` reader - Channel 0 capture/compare interrupt enable"]
-        pub type Ch0ieR = crate::BitReader;
+        pub type Ch0ieR = crate::BitReader<Ch0ie>;
+        impl Ch0ieR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0ie {
+                match self.bits {
+                    false => Ch0ie::Disabled,
+                    true => Ch0ie::Enabled,
+                }
+            }
+            #[doc = "Channel 0 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch0ie::Disabled
+            }
+            #[doc = "Channel 0 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch0ie::Enabled
+            }
+        }
         #[doc = "Field `CH0IE` writer - Channel 0 capture/compare interrupt enable"]
-        pub type Ch0ieW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0ieW<'a, REG> = crate::BitWriter<'a, REG, Ch0ie>;
+        impl<'a, REG> Ch0ieW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 0 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0ie::Disabled)
+            }
+            #[doc = "Channel 0 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0ie::Enabled)
+            }
+        }
+        #[doc = "Channel 1 capture/compare interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1ie {
+            #[doc = "0: Channel 1 capture/compare interrupt disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 1 capture/compare interrupt enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch1ie> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1ie) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1IE` reader - Channel 1 capture/compare interrupt enable"]
-        pub type Ch1ieR = crate::BitReader;
+        pub type Ch1ieR = crate::BitReader<Ch1ie>;
+        impl Ch1ieR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1ie {
+                match self.bits {
+                    false => Ch1ie::Disabled,
+                    true => Ch1ie::Enabled,
+                }
+            }
+            #[doc = "Channel 1 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch1ie::Disabled
+            }
+            #[doc = "Channel 1 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch1ie::Enabled
+            }
+        }
         #[doc = "Field `CH1IE` writer - Channel 1 capture/compare interrupt enable"]
-        pub type Ch1ieW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1ieW<'a, REG> = crate::BitWriter<'a, REG, Ch1ie>;
+        impl<'a, REG> Ch1ieW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 1 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1ie::Disabled)
+            }
+            #[doc = "Channel 1 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1ie::Enabled)
+            }
+        }
+        #[doc = "Channel 2 capture/compare interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch2ie {
+            #[doc = "0: Channel 2 capture/compare interrupt disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 2 capture/compare interrupt enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch2ie> for bool {
+            #[inline(always)]
+            fn from(variant: Ch2ie) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH2IE` reader - Channel 2 capture/compare interrupt enable"]
-        pub type Ch2ieR = crate::BitReader;
+        pub type Ch2ieR = crate::BitReader<Ch2ie>;
+        impl Ch2ieR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch2ie {
+                match self.bits {
+                    false => Ch2ie::Disabled,
+                    true => Ch2ie::Enabled,
+                }
+            }
+            #[doc = "Channel 2 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch2ie::Disabled
+            }
+            #[doc = "Channel 2 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch2ie::Enabled
+            }
+        }
         #[doc = "Field `CH2IE` writer - Channel 2 capture/compare interrupt enable"]
-        pub type Ch2ieW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch2ieW<'a, REG> = crate::BitWriter<'a, REG, Ch2ie>;
+        impl<'a, REG> Ch2ieW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 2 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2ie::Disabled)
+            }
+            #[doc = "Channel 2 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2ie::Enabled)
+            }
+        }
+        #[doc = "Channel 3 capture/compare interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch3ie {
+            #[doc = "0: Channel 3 capture/compare interrupt disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 3 capture/compare interrupt enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch3ie> for bool {
+            #[inline(always)]
+            fn from(variant: Ch3ie) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH3IE` reader - Channel 3 capture/compare interrupt enable"]
-        pub type Ch3ieR = crate::BitReader;
+        pub type Ch3ieR = crate::BitReader<Ch3ie>;
+        impl Ch3ieR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch3ie {
+                match self.bits {
+                    false => Ch3ie::Disabled,
+                    true => Ch3ie::Enabled,
+                }
+            }
+            #[doc = "Channel 3 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch3ie::Disabled
+            }
+            #[doc = "Channel 3 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch3ie::Enabled
+            }
+        }
         #[doc = "Field `CH3IE` writer - Channel 3 capture/compare interrupt enable"]
-        pub type Ch3ieW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch3ieW<'a, REG> = crate::BitWriter<'a, REG, Ch3ie>;
+        impl<'a, REG> Ch3ieW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 3 capture/compare interrupt disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3ie::Disabled)
+            }
+            #[doc = "Channel 3 capture/compare interrupt enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3ie::Enabled)
+            }
+        }
+        #[doc = "Trigger interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Trgie {
+            #[doc = "0: Trigger interrupt disabled."]
+            Disabled = 0,
+            #[doc = "1: Trigger interrupt enabled."]
+            Enabled = 1,
+        }
+        impl From<Trgie> for bool {
+            #[inline(always)]
+            fn from(variant: Trgie) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `TRGIE` reader - Trigger interrupt enable"]
-        pub type TrgieR = crate::BitReader;
+        pub type TrgieR = crate::BitReader<Trgie>;
+        impl TrgieR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Trgie {
+                match self.bits {
+                    false => Trgie::Disabled,
+                    true => Trgie::Enabled,
+                }
+            }
+            #[doc = "Trigger interrupt disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Trgie::Disabled
+            }
+            #[doc = "Trigger interrupt enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Trgie::Enabled
+            }
+        }
         #[doc = "Field `TRGIE` writer - Trigger interrupt enable"]
-        pub type TrgieW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type TrgieW<'a, REG> = crate::BitWriter<'a, REG, Trgie>;
+        impl<'a, REG> TrgieW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Trigger interrupt disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgie::Disabled)
+            }
+            #[doc = "Trigger interrupt enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgie::Enabled)
+            }
+        }
+        #[doc = "Update DMA request enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Upden {
+            #[doc = "0: Update DMA request disabled."]
+            Disabled = 0,
+            #[doc = "1: Update DMA request enabled."]
+            Enabled = 1,
+        }
+        impl From<Upden> for bool {
+            #[inline(always)]
+            fn from(variant: Upden) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `UPDEN` reader - Update DMA request enable"]
-        pub type UpdenR = crate::BitReader;
+        pub type UpdenR = crate::BitReader<Upden>;
+        impl UpdenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Upden {
+                match self.bits {
+                    false => Upden::Disabled,
+                    true => Upden::Enabled,
+                }
+            }
+            #[doc = "Update DMA request disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Upden::Disabled
+            }
+            #[doc = "Update DMA request enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Upden::Enabled
+            }
+        }
         #[doc = "Field `UPDEN` writer - Update DMA request enable"]
-        pub type UpdenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type UpdenW<'a, REG> = crate::BitWriter<'a, REG, Upden>;
+        impl<'a, REG> UpdenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Update DMA request disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Upden::Disabled)
+            }
+            #[doc = "Update DMA request enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Upden::Enabled)
+            }
+        }
+        #[doc = "Channel 0 capture/compare DMA request enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0den {
+            #[doc = "0: Channel 0 capture/compare DMA request disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 0 capture/compare DMA request enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch0den> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0den) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0DEN` reader - Channel 0 capture/compare DMA request enable"]
-        pub type Ch0denR = crate::BitReader;
+        pub type Ch0denR = crate::BitReader<Ch0den>;
+        impl Ch0denR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0den {
+                match self.bits {
+                    false => Ch0den::Disabled,
+                    true => Ch0den::Enabled,
+                }
+            }
+            #[doc = "Channel 0 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch0den::Disabled
+            }
+            #[doc = "Channel 0 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch0den::Enabled
+            }
+        }
         #[doc = "Field `CH0DEN` writer - Channel 0 capture/compare DMA request enable"]
-        pub type Ch0denW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0denW<'a, REG> = crate::BitWriter<'a, REG, Ch0den>;
+        impl<'a, REG> Ch0denW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 0 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0den::Disabled)
+            }
+            #[doc = "Channel 0 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0den::Enabled)
+            }
+        }
+        #[doc = "Channel 1 capture/compare DMA request enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1den {
+            #[doc = "0: Channel 1 capture/compare DMA request disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 1 capture/compare DMA request enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch1den> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1den) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1DEN` reader - Channel 1 capture/compare DMA request enable"]
-        pub type Ch1denR = crate::BitReader;
+        pub type Ch1denR = crate::BitReader<Ch1den>;
+        impl Ch1denR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1den {
+                match self.bits {
+                    false => Ch1den::Disabled,
+                    true => Ch1den::Enabled,
+                }
+            }
+            #[doc = "Channel 1 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch1den::Disabled
+            }
+            #[doc = "Channel 1 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch1den::Enabled
+            }
+        }
         #[doc = "Field `CH1DEN` writer - Channel 1 capture/compare DMA request enable"]
-        pub type Ch1denW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1denW<'a, REG> = crate::BitWriter<'a, REG, Ch1den>;
+        impl<'a, REG> Ch1denW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 1 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1den::Disabled)
+            }
+            #[doc = "Channel 1 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1den::Enabled)
+            }
+        }
+        #[doc = "Channel 2 capture/compare DMA request enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch2den {
+            #[doc = "0: Channel 2 capture/compare DMA request disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 2 capture/compare DMA request enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch2den> for bool {
+            #[inline(always)]
+            fn from(variant: Ch2den) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH2DEN` reader - Channel 2 capture/compare DMA request enable"]
-        pub type Ch2denR = crate::BitReader;
+        pub type Ch2denR = crate::BitReader<Ch2den>;
+        impl Ch2denR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch2den {
+                match self.bits {
+                    false => Ch2den::Disabled,
+                    true => Ch2den::Enabled,
+                }
+            }
+            #[doc = "Channel 2 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch2den::Disabled
+            }
+            #[doc = "Channel 2 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch2den::Enabled
+            }
+        }
         #[doc = "Field `CH2DEN` writer - Channel 2 capture/compare DMA request enable"]
-        pub type Ch2denW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch2denW<'a, REG> = crate::BitWriter<'a, REG, Ch2den>;
+        impl<'a, REG> Ch2denW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 2 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2den::Disabled)
+            }
+            #[doc = "Channel 2 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2den::Enabled)
+            }
+        }
+        #[doc = "Channel 3 capture/compare DMA request enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch3den {
+            #[doc = "0: Channel 3 capture/compare DMA request disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 3 capture/compare DMA request enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch3den> for bool {
+            #[inline(always)]
+            fn from(variant: Ch3den) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH3DEN` reader - Channel 3 capture/compare DMA request enable"]
-        pub type Ch3denR = crate::BitReader;
+        pub type Ch3denR = crate::BitReader<Ch3den>;
+        impl Ch3denR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch3den {
+                match self.bits {
+                    false => Ch3den::Disabled,
+                    true => Ch3den::Enabled,
+                }
+            }
+            #[doc = "Channel 3 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch3den::Disabled
+            }
+            #[doc = "Channel 3 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch3den::Enabled
+            }
+        }
         #[doc = "Field `CH3DEN` writer - Channel 3 capture/compare DMA request enable"]
-        pub type Ch3denW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch3denW<'a, REG> = crate::BitWriter<'a, REG, Ch3den>;
+        impl<'a, REG> Ch3denW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 3 capture/compare DMA request disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3den::Disabled)
+            }
+            #[doc = "Channel 3 capture/compare DMA request enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3den::Enabled)
+            }
+        }
+        #[doc = "Trigger DMA request enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Trgden {
+            #[doc = "0: Trigger DMA request disabled."]
+            Disabled = 0,
+            #[doc = "1: Trigger DMA request enabled."]
+            Enabled = 1,
+        }
+        impl From<Trgden> for bool {
+            #[inline(always)]
+            fn from(variant: Trgden) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `TRGDEN` reader - Trigger DMA request enable"]
-        pub type TrgdenR = crate::BitReader;
+        pub type TrgdenR = crate::BitReader<Trgden>;
+        impl TrgdenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Trgden {
+                match self.bits {
+                    false => Trgden::Disabled,
+                    true => Trgden::Enabled,
+                }
+            }
+            #[doc = "Trigger DMA request disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Trgden::Disabled
+            }
+            #[doc = "Trigger DMA request enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Trgden::Enabled
+            }
+        }
         #[doc = "Field `TRGDEN` writer - Trigger DMA request enable"]
-        pub type TrgdenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type TrgdenW<'a, REG> = crate::BitWriter<'a, REG, Trgden>;
+        impl<'a, REG> TrgdenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Trigger DMA request disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgden::Disabled)
+            }
+            #[doc = "Trigger DMA request enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgden::Enabled)
+            }
+        }
         impl R {
             #[doc = "Bit 0 - Update interrupt enable"]
             #[inline(always)]
@@ -94533,46 +95676,536 @@ pub mod timer1 {
         pub type R = crate::R<IntfSpec>;
         #[doc = "Register `INTF` writer"]
         pub type W = crate::W<IntfSpec>;
+        #[doc = "Update interrupt flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Upif {
+            #[doc = "0: No update interrupt occurred."]
+            Clear = 0,
+            #[doc = "1: Update interrupt pending."]
+            UpdatePending = 1,
+        }
+        impl From<Upif> for bool {
+            #[inline(always)]
+            fn from(variant: Upif) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `UPIF` reader - Update interrupt flag"]
-        pub type UpifR = crate::BitReader;
+        pub type UpifR = crate::BitReader<Upif>;
+        impl UpifR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Upif {
+                match self.bits {
+                    false => Upif::Clear,
+                    true => Upif::UpdatePending,
+                }
+            }
+            #[doc = "No update interrupt occurred."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Upif::Clear
+            }
+            #[doc = "Update interrupt pending."]
+            #[inline(always)]
+            pub fn is_update_pending(&self) -> bool {
+                *self == Upif::UpdatePending
+            }
+        }
         #[doc = "Field `UPIF` writer - Update interrupt flag"]
-        pub type UpifW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type UpifW<'a, REG> = crate::BitWriter<'a, REG, Upif>;
+        impl<'a, REG> UpifW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No update interrupt occurred."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Upif::Clear)
+            }
+            #[doc = "Update interrupt pending."]
+            #[inline(always)]
+            pub fn update_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Upif::UpdatePending)
+            }
+        }
+        #[doc = "Channel 0 capture/compare interrupt flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0if {
+            #[doc = "0: No channel 0 capture/compare interrupt enable."]
+            Clear = 0,
+            #[doc = "1: Channel 0 capture/compare interrupt enable."]
+            CapturePending = 1,
+        }
+        impl From<Ch0if> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0if) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0IF` reader - Channel 0 capture/compare interrupt flag"]
-        pub type Ch0ifR = crate::BitReader;
+        pub type Ch0ifR = crate::BitReader<Ch0if>;
+        impl Ch0ifR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0if {
+                match self.bits {
+                    false => Ch0if::Clear,
+                    true => Ch0if::CapturePending,
+                }
+            }
+            #[doc = "No channel 0 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch0if::Clear
+            }
+            #[doc = "Channel 0 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_capture_pending(&self) -> bool {
+                *self == Ch0if::CapturePending
+            }
+        }
         #[doc = "Field `CH0IF` writer - Channel 0 capture/compare interrupt flag"]
-        pub type Ch0ifW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0ifW<'a, REG> = crate::BitWriter<'a, REG, Ch0if>;
+        impl<'a, REG> Ch0ifW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 0 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0if::Clear)
+            }
+            #[doc = "Channel 0 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn capture_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0if::CapturePending)
+            }
+        }
+        #[doc = "Channel 1 capture/compare interrupt flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1if {
+            #[doc = "0: No channel 1 capture/compare interrupt enable."]
+            Clear = 0,
+            #[doc = "1: Channel 1 capture/compare interrupt enable."]
+            CapturePending = 1,
+        }
+        impl From<Ch1if> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1if) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1IF` reader - Channel 1 capture/compare interrupt flag"]
-        pub type Ch1ifR = crate::BitReader;
+        pub type Ch1ifR = crate::BitReader<Ch1if>;
+        impl Ch1ifR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1if {
+                match self.bits {
+                    false => Ch1if::Clear,
+                    true => Ch1if::CapturePending,
+                }
+            }
+            #[doc = "No channel 1 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch1if::Clear
+            }
+            #[doc = "Channel 1 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_capture_pending(&self) -> bool {
+                *self == Ch1if::CapturePending
+            }
+        }
         #[doc = "Field `CH1IF` writer - Channel 1 capture/compare interrupt flag"]
-        pub type Ch1ifW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1ifW<'a, REG> = crate::BitWriter<'a, REG, Ch1if>;
+        impl<'a, REG> Ch1ifW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 1 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1if::Clear)
+            }
+            #[doc = "Channel 1 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn capture_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1if::CapturePending)
+            }
+        }
+        #[doc = "Channel 2 capture/compare interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch2if {
+            #[doc = "0: No channel 2 capture/compare interrupt enable."]
+            Clear = 0,
+            #[doc = "1: Channel 2 capture/compare interrupt enable."]
+            CapturePending = 1,
+        }
+        impl From<Ch2if> for bool {
+            #[inline(always)]
+            fn from(variant: Ch2if) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH2IF` reader - Channel 2 capture/compare interrupt enable"]
-        pub type Ch2ifR = crate::BitReader;
+        pub type Ch2ifR = crate::BitReader<Ch2if>;
+        impl Ch2ifR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch2if {
+                match self.bits {
+                    false => Ch2if::Clear,
+                    true => Ch2if::CapturePending,
+                }
+            }
+            #[doc = "No channel 2 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch2if::Clear
+            }
+            #[doc = "Channel 2 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_capture_pending(&self) -> bool {
+                *self == Ch2if::CapturePending
+            }
+        }
         #[doc = "Field `CH2IF` writer - Channel 2 capture/compare interrupt enable"]
-        pub type Ch2ifW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch2ifW<'a, REG> = crate::BitWriter<'a, REG, Ch2if>;
+        impl<'a, REG> Ch2ifW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 2 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2if::Clear)
+            }
+            #[doc = "Channel 2 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn capture_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2if::CapturePending)
+            }
+        }
+        #[doc = "Channel 3 capture/compare interrupt enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch3if {
+            #[doc = "0: No channel 3 capture/compare interrupt enable."]
+            Clear = 0,
+            #[doc = "1: Channel 3 capture/compare interrupt enable."]
+            CapturePending = 1,
+        }
+        impl From<Ch3if> for bool {
+            #[inline(always)]
+            fn from(variant: Ch3if) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH3IF` reader - Channel 3 capture/compare interrupt enable"]
-        pub type Ch3ifR = crate::BitReader;
+        pub type Ch3ifR = crate::BitReader<Ch3if>;
+        impl Ch3ifR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch3if {
+                match self.bits {
+                    false => Ch3if::Clear,
+                    true => Ch3if::CapturePending,
+                }
+            }
+            #[doc = "No channel 3 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch3if::Clear
+            }
+            #[doc = "Channel 3 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn is_capture_pending(&self) -> bool {
+                *self == Ch3if::CapturePending
+            }
+        }
         #[doc = "Field `CH3IF` writer - Channel 3 capture/compare interrupt enable"]
-        pub type Ch3ifW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch3ifW<'a, REG> = crate::BitWriter<'a, REG, Ch3if>;
+        impl<'a, REG> Ch3ifW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 3 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3if::Clear)
+            }
+            #[doc = "Channel 3 capture/compare interrupt enable."]
+            #[inline(always)]
+            pub fn capture_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3if::CapturePending)
+            }
+        }
+        #[doc = "Trigger interrupt flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Trgif {
+            #[doc = "0: No trigger interrupt occurred."]
+            Clear = 0,
+            #[doc = "1: Trigger interrupt pending."]
+            TriggerPending = 1,
+        }
+        impl From<Trgif> for bool {
+            #[inline(always)]
+            fn from(variant: Trgif) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `TRGIF` reader - Trigger interrupt flag"]
-        pub type TrgifR = crate::BitReader;
+        pub type TrgifR = crate::BitReader<Trgif>;
+        impl TrgifR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Trgif {
+                match self.bits {
+                    false => Trgif::Clear,
+                    true => Trgif::TriggerPending,
+                }
+            }
+            #[doc = "No trigger interrupt occurred."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Trgif::Clear
+            }
+            #[doc = "Trigger interrupt pending."]
+            #[inline(always)]
+            pub fn is_trigger_pending(&self) -> bool {
+                *self == Trgif::TriggerPending
+            }
+        }
         #[doc = "Field `TRGIF` writer - Trigger interrupt flag"]
-        pub type TrgifW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type TrgifW<'a, REG> = crate::BitWriter<'a, REG, Trgif>;
+        impl<'a, REG> TrgifW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No trigger interrupt occurred."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgif::Clear)
+            }
+            #[doc = "Trigger interrupt pending."]
+            #[inline(always)]
+            pub fn trigger_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgif::TriggerPending)
+            }
+        }
+        #[doc = "Channel 0 over capture flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0of {
+            #[doc = "0: No channel 0 overflow/underflow interrupt occurred."]
+            Clear = 0,
+            #[doc = "1: Channel 0 overflow/underflow interrupt pending."]
+            OverflowPending = 1,
+        }
+        impl From<Ch0of> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0of) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0OF` reader - Channel 0 over capture flag"]
-        pub type Ch0ofR = crate::BitReader;
+        pub type Ch0ofR = crate::BitReader<Ch0of>;
+        impl Ch0ofR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0of {
+                match self.bits {
+                    false => Ch0of::Clear,
+                    true => Ch0of::OverflowPending,
+                }
+            }
+            #[doc = "No channel 0 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch0of::Clear
+            }
+            #[doc = "Channel 0 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn is_overflow_pending(&self) -> bool {
+                *self == Ch0of::OverflowPending
+            }
+        }
         #[doc = "Field `CH0OF` writer - Channel 0 over capture flag"]
-        pub type Ch0ofW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0ofW<'a, REG> = crate::BitWriter<'a, REG, Ch0of>;
+        impl<'a, REG> Ch0ofW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 0 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0of::Clear)
+            }
+            #[doc = "Channel 0 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn overflow_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0of::OverflowPending)
+            }
+        }
+        #[doc = "Channel 1 over capture flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1of {
+            #[doc = "0: No channel 1 overflow/underflow interrupt occurred."]
+            Clear = 0,
+            #[doc = "1: Channel 1 overflow/underflow interrupt pending."]
+            OverflowPending = 1,
+        }
+        impl From<Ch1of> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1of) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1OF` reader - Channel 1 over capture flag"]
-        pub type Ch1ofR = crate::BitReader;
+        pub type Ch1ofR = crate::BitReader<Ch1of>;
+        impl Ch1ofR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1of {
+                match self.bits {
+                    false => Ch1of::Clear,
+                    true => Ch1of::OverflowPending,
+                }
+            }
+            #[doc = "No channel 1 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch1of::Clear
+            }
+            #[doc = "Channel 1 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn is_overflow_pending(&self) -> bool {
+                *self == Ch1of::OverflowPending
+            }
+        }
         #[doc = "Field `CH1OF` writer - Channel 1 over capture flag"]
-        pub type Ch1ofW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1ofW<'a, REG> = crate::BitWriter<'a, REG, Ch1of>;
+        impl<'a, REG> Ch1ofW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 1 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1of::Clear)
+            }
+            #[doc = "Channel 1 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn overflow_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1of::OverflowPending)
+            }
+        }
+        #[doc = "Channel 2 over capture flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch2of {
+            #[doc = "0: No channel 2 overflow/underflow interrupt occurred."]
+            Clear = 0,
+            #[doc = "1: Channel 2 overflow/underflow interrupt pending."]
+            OverflowPending = 1,
+        }
+        impl From<Ch2of> for bool {
+            #[inline(always)]
+            fn from(variant: Ch2of) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH2OF` reader - Channel 2 over capture flag"]
-        pub type Ch2ofR = crate::BitReader;
+        pub type Ch2ofR = crate::BitReader<Ch2of>;
+        impl Ch2ofR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch2of {
+                match self.bits {
+                    false => Ch2of::Clear,
+                    true => Ch2of::OverflowPending,
+                }
+            }
+            #[doc = "No channel 2 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch2of::Clear
+            }
+            #[doc = "Channel 2 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn is_overflow_pending(&self) -> bool {
+                *self == Ch2of::OverflowPending
+            }
+        }
         #[doc = "Field `CH2OF` writer - Channel 2 over capture flag"]
-        pub type Ch2ofW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch2ofW<'a, REG> = crate::BitWriter<'a, REG, Ch2of>;
+        impl<'a, REG> Ch2ofW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 2 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2of::Clear)
+            }
+            #[doc = "Channel 2 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn overflow_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2of::OverflowPending)
+            }
+        }
+        #[doc = "Channel 3 over capture flag\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch3of {
+            #[doc = "0: No channel 3 overflow/underflow interrupt occurred."]
+            Clear = 0,
+            #[doc = "1: Channel 3 overflow/underflow interrupt pending."]
+            OverflowPending = 1,
+        }
+        impl From<Ch3of> for bool {
+            #[inline(always)]
+            fn from(variant: Ch3of) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH3OF` reader - Channel 3 over capture flag"]
-        pub type Ch3ofR = crate::BitReader;
+        pub type Ch3ofR = crate::BitReader<Ch3of>;
+        impl Ch3ofR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch3of {
+                match self.bits {
+                    false => Ch3of::Clear,
+                    true => Ch3of::OverflowPending,
+                }
+            }
+            #[doc = "No channel 3 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn is_clear(&self) -> bool {
+                *self == Ch3of::Clear
+            }
+            #[doc = "Channel 3 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn is_overflow_pending(&self) -> bool {
+                *self == Ch3of::OverflowPending
+            }
+        }
         #[doc = "Field `CH3OF` writer - Channel 3 over capture flag"]
-        pub type Ch3ofW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch3ofW<'a, REG> = crate::BitWriter<'a, REG, Ch3of>;
+        impl<'a, REG> Ch3ofW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "No channel 3 overflow/underflow interrupt occurred."]
+            #[inline(always)]
+            pub fn clear(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3of::Clear)
+            }
+            #[doc = "Channel 3 overflow/underflow interrupt pending."]
+            #[inline(always)]
+            pub fn overflow_pending(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3of::OverflowPending)
+            }
+        }
         impl R {
             #[doc = "Bit 0 - Update interrupt flag"]
             #[inline(always)]
@@ -94698,18 +96331,150 @@ pub mod timer1 {
     pub mod swevg {
         #[doc = "Register `SWEVG` writer"]
         pub type W = crate::W<SwevgSpec>;
+        #[doc = "Update generation\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Upg {
+            #[doc = "1: This bit can be set by software, and cleared by hardware automatically. When this bit is set, the counter is cleared if the center-aligned or up counting mode is selected, else (down counting) it takes the auto-reload value. The prescaler counter is cleared at the same time."]
+            Update = 1,
+        }
+        impl From<Upg> for bool {
+            #[inline(always)]
+            fn from(variant: Upg) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `UPG` writer - Update generation"]
-        pub type UpgW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type UpgW<'a, REG> = crate::BitWriter<'a, REG, Upg>;
+        impl<'a, REG> UpgW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "This bit can be set by software, and cleared by hardware automatically. When this bit is set, the counter is cleared if the center-aligned or up counting mode is selected, else (down counting) it takes the auto-reload value. The prescaler counter is cleared at the same time."]
+            #[inline(always)]
+            pub fn update(self) -> &'a mut crate::W<REG> {
+                self.variant(Upg::Update)
+            }
+        }
+        #[doc = "Channel 0 capture or compare event generation\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0g {
+            #[doc = "1: Channel 0’s capture or compare event generation."]
+            Channel0 = 1,
+        }
+        impl From<Ch0g> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0g) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0G` writer - Channel 0 capture or compare event generation"]
-        pub type Ch0gW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0gW<'a, REG> = crate::BitWriter<'a, REG, Ch0g>;
+        impl<'a, REG> Ch0gW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 0’s capture or compare event generation."]
+            #[inline(always)]
+            pub fn channel0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0g::Channel0)
+            }
+        }
+        #[doc = "Channel 1 capture or compare event generation\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1g {
+            #[doc = "1: Channel 1’s capture or compare event generation."]
+            Channel1 = 1,
+        }
+        impl From<Ch1g> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1g) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1G` writer - Channel 1 capture or compare event generation"]
-        pub type Ch1gW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1gW<'a, REG> = crate::BitWriter<'a, REG, Ch1g>;
+        impl<'a, REG> Ch1gW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 1’s capture or compare event generation."]
+            #[inline(always)]
+            pub fn channel1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1g::Channel1)
+            }
+        }
+        #[doc = "Channel 2 capture or compare event generation\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch2g {
+            #[doc = "1: Channel 2’s capture or compare event generation."]
+            Channel2 = 1,
+        }
+        impl From<Ch2g> for bool {
+            #[inline(always)]
+            fn from(variant: Ch2g) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH2G` writer - Channel 2 capture or compare event generation"]
-        pub type Ch2gW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch2gW<'a, REG> = crate::BitWriter<'a, REG, Ch2g>;
+        impl<'a, REG> Ch2gW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 2’s capture or compare event generation."]
+            #[inline(always)]
+            pub fn channel2(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch2g::Channel2)
+            }
+        }
+        #[doc = "Channel 3 capture or compare event generation\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch3g {
+            #[doc = "1: Channel 3’s capture or compare event generation."]
+            Channel3 = 1,
+        }
+        impl From<Ch3g> for bool {
+            #[inline(always)]
+            fn from(variant: Ch3g) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH3G` writer - Channel 3 capture or compare event generation"]
-        pub type Ch3gW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch3gW<'a, REG> = crate::BitWriter<'a, REG, Ch3g>;
+        impl<'a, REG> Ch3gW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 3’s capture or compare event generation."]
+            #[inline(always)]
+            pub fn channel3(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch3g::Channel3)
+            }
+        }
+        #[doc = "Trigger event generation\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Trgg {
+            #[doc = "1: Trigger event generation This bit is set by software and cleared by hardware automatically. When this bit is set, the TRGIF flag in TIMERx_STAT register is set, related interrupt or DMA transfer can occur if enabled."]
+            Trigger = 1,
+        }
+        impl From<Trgg> for bool {
+            #[inline(always)]
+            fn from(variant: Trgg) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `TRGG` writer - Trigger event generation"]
-        pub type TrggW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type TrggW<'a, REG> = crate::BitWriter<'a, REG, Trgg>;
+        impl<'a, REG> TrggW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Trigger event generation This bit is set by software and cleared by hardware automatically. When this bit is set, the TRGIF flag in TIMERx_STAT register is set, related interrupt or DMA transfer can occur if enabled."]
+            #[inline(always)]
+            pub fn trigger(self) -> &'a mut crate::W<REG> {
+                self.variant(Trgg::Trigger)
+            }
+        }
         impl W {
             #[doc = "Bit 0 - Update generation"]
             #[inline(always)]
@@ -94754,55 +96519,781 @@ pub mod timer1 {
         #[doc = "`reset()` method sets SWEVG to value 0"]
         impl crate::Resettable for SwevgSpec {}
     }
-    #[doc = "CHCTL0_Output (rw) register accessor: Channel control register 0 (output mode)\n\nYou can [`read`](crate::Reg::read) this register and get [`chctl0_output::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`chctl0_output::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@chctl0_output`] module"]
-    #[doc(alias = "CHCTL0_Output")]
-    pub type Chctl0Output = crate::Reg<chctl0_output::Chctl0OutputSpec>;
+    #[doc = "CHCTL0 (rw) register accessor: Channel control register 0 (output mode)\n\nYou can [`read`](crate::Reg::read) this register and get [`chctl0::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`chctl0::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@chctl0`] module"]
+    #[doc(alias = "CHCTL0")]
+    pub type Chctl0 = crate::Reg<chctl0::Chctl0Spec>;
     #[doc = "Channel control register 0 (output mode)"]
-    pub mod chctl0_output {
-        #[doc = "Register `CHCTL0_Output` reader"]
-        pub type R = crate::R<Chctl0OutputSpec>;
-        #[doc = "Register `CHCTL0_Output` writer"]
-        pub type W = crate::W<Chctl0OutputSpec>;
+    pub mod chctl0 {
+        #[doc = "Register `CHCTL0` reader"]
+        pub type R = crate::R<Chctl0Spec>;
+        #[doc = "Register `CHCTL0` writer"]
+        pub type W = crate::W<Chctl0Spec>;
+        #[doc = "Channel 0 I/O mode selection\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Ch0ms {
+            #[doc = "0: Channel 0 output mode."]
+            Output = 0,
+            #[doc = "1: Channel 0 is programmed as input mode, IS0 is connected to CI0FE0"]
+            InputCi1 = 1,
+            #[doc = "2: Channel 0 is programmed as input mode, IS0 is connected to CI1FE0"]
+            InputCi0 = 2,
+            #[doc = "3: Channel 0 is programmed as input mode, IS0 is connected to ITS"]
+            InputIts = 3,
+        }
+        impl From<Ch0ms> for u8 {
+            #[inline(always)]
+            fn from(variant: Ch0ms) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Ch0ms {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Ch0ms {}
         #[doc = "Field `CH0MS` reader - Channel 0 I/O mode selection"]
-        pub type Ch0msR = crate::FieldReader;
+        pub type Ch0msR = crate::FieldReader<Ch0ms>;
+        impl Ch0msR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0ms {
+                match self.bits {
+                    0 => Ch0ms::Output,
+                    1 => Ch0ms::InputCi1,
+                    2 => Ch0ms::InputCi0,
+                    3 => Ch0ms::InputIts,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Channel 0 output mode."]
+            #[inline(always)]
+            pub fn is_output(&self) -> bool {
+                *self == Ch0ms::Output
+            }
+            #[doc = "Channel 0 is programmed as input mode, IS0 is connected to CI0FE0"]
+            #[inline(always)]
+            pub fn is_input_ci1(&self) -> bool {
+                *self == Ch0ms::InputCi1
+            }
+            #[doc = "Channel 0 is programmed as input mode, IS0 is connected to CI1FE0"]
+            #[inline(always)]
+            pub fn is_input_ci0(&self) -> bool {
+                *self == Ch0ms::InputCi0
+            }
+            #[doc = "Channel 0 is programmed as input mode, IS0 is connected to ITS"]
+            #[inline(always)]
+            pub fn is_input_its(&self) -> bool {
+                *self == Ch0ms::InputIts
+            }
+        }
         #[doc = "Field `CH0MS` writer - Channel 0 I/O mode selection"]
-        pub type Ch0msW<'a, REG> = crate::FieldWriter<'a, REG, 2>;
+        pub type Ch0msW<'a, REG> = crate::FieldWriter<'a, REG, 2, Ch0ms, crate::Safe>;
+        impl<'a, REG> Ch0msW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "Channel 0 output mode."]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0ms::Output)
+            }
+            #[doc = "Channel 0 is programmed as input mode, IS0 is connected to CI0FE0"]
+            #[inline(always)]
+            pub fn input_ci1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0ms::InputCi1)
+            }
+            #[doc = "Channel 0 is programmed as input mode, IS0 is connected to CI1FE0"]
+            #[inline(always)]
+            pub fn input_ci0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0ms::InputCi0)
+            }
+            #[doc = "Channel 0 is programmed as input mode, IS0 is connected to ITS"]
+            #[inline(always)]
+            pub fn input_its(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0ms::InputIts)
+            }
+        }
+        #[doc = "Channel 0 output compare fast enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0comfen {
+            #[doc = "0: Channel 0 output compare fast disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 0 compare fast enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch0comfen> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0comfen) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0COMFEN` reader - Channel 0 output compare fast enable"]
-        pub type Ch0comfenR = crate::BitReader;
+        pub type Ch0comfenR = crate::BitReader<Ch0comfen>;
+        impl Ch0comfenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0comfen {
+                match self.bits {
+                    false => Ch0comfen::Disabled,
+                    true => Ch0comfen::Enabled,
+                }
+            }
+            #[doc = "Channel 0 output compare fast disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch0comfen::Disabled
+            }
+            #[doc = "Channel 0 compare fast enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch0comfen::Enabled
+            }
+        }
         #[doc = "Field `CH0COMFEN` writer - Channel 0 output compare fast enable"]
-        pub type Ch0comfenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0comfenW<'a, REG> = crate::BitWriter<'a, REG, Ch0comfen>;
+        impl<'a, REG> Ch0comfenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 0 output compare fast disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comfen::Disabled)
+            }
+            #[doc = "Channel 0 compare fast enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comfen::Enabled)
+            }
+        }
+        #[doc = "Channel 0 compare output shadow enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0comsen {
+            #[doc = "0: Channel 0 output compare shadow disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 0 compare shadow enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch0comsen> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0comsen) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0COMSEN` reader - Channel 0 compare output shadow enable"]
-        pub type Ch0comsenR = crate::BitReader;
+        pub type Ch0comsenR = crate::BitReader<Ch0comsen>;
+        impl Ch0comsenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0comsen {
+                match self.bits {
+                    false => Ch0comsen::Disabled,
+                    true => Ch0comsen::Enabled,
+                }
+            }
+            #[doc = "Channel 0 output compare shadow disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch0comsen::Disabled
+            }
+            #[doc = "Channel 0 compare shadow enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch0comsen::Enabled
+            }
+        }
         #[doc = "Field `CH0COMSEN` writer - Channel 0 compare output shadow enable"]
-        pub type Ch0comsenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0comsenW<'a, REG> = crate::BitWriter<'a, REG, Ch0comsen>;
+        impl<'a, REG> Ch0comsenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 0 output compare shadow disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comsen::Disabled)
+            }
+            #[doc = "Channel 0 compare shadow enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comsen::Enabled)
+            }
+        }
+        #[doc = "Channel 0 compare output control\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Ch0comctl {
+            #[doc = "0: Timing mode. The O0CPRE signal keeps stable, independent of the comparison between the register TIMERx_CH0CV and the counter TIMERx_CNT."]
+            Mode0 = 0,
+            #[doc = "1: Set the channel output. O0CPRE signal is forced high when the counter is equals to the output compare register TIMERx_CH0CV."]
+            Mode1 = 1,
+            #[doc = "2: Clear the channel output. O0CPRE signal is forced low when the counter is equals to the output compare register TIMERx_CH0CV."]
+            Mode2 = 2,
+            #[doc = "3: Toggle on match. O0CPRE toggles when the counter is equals to the output compare register TIMERx_CH0CV."]
+            Mode3 = 3,
+            #[doc = "4: Force low. O0CPRE is forced to low level."]
+            Mode4 = 4,
+            #[doc = "5: Force high. O0CPRE is forced to high level."]
+            Mode5 = 5,
+            #[doc = "6: PWM mode0. When counting up, O0CPRE is high when the counter is smaller than TIMERx_CH0CV, and low otherwise. When counting down, O0CPRE is low when the counter is larger than TIMERx_CH0CV, and high otherwise."]
+            Pwmmode0 = 6,
+            #[doc = "7: PWM mode1. When counting up, O0CPRE is low when the counter is smaller than TIMERx_CH0CV, and high otherwise. When counting down, O0CPRE is high when the counter is larger than TIMERx_CH0CV, and low otherwise."]
+            Pwmmode1 = 7,
+        }
+        impl From<Ch0comctl> for u8 {
+            #[inline(always)]
+            fn from(variant: Ch0comctl) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Ch0comctl {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Ch0comctl {}
         #[doc = "Field `CH0COMCTL` reader - Channel 0 compare output control"]
-        pub type Ch0comctlR = crate::FieldReader;
+        pub type Ch0comctlR = crate::FieldReader<Ch0comctl>;
+        impl Ch0comctlR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0comctl {
+                match self.bits {
+                    0 => Ch0comctl::Mode0,
+                    1 => Ch0comctl::Mode1,
+                    2 => Ch0comctl::Mode2,
+                    3 => Ch0comctl::Mode3,
+                    4 => Ch0comctl::Mode4,
+                    5 => Ch0comctl::Mode5,
+                    6 => Ch0comctl::Pwmmode0,
+                    7 => Ch0comctl::Pwmmode1,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Timing mode. The O0CPRE signal keeps stable, independent of the comparison between the register TIMERx_CH0CV and the counter TIMERx_CNT."]
+            #[inline(always)]
+            pub fn is_mode0(&self) -> bool {
+                *self == Ch0comctl::Mode0
+            }
+            #[doc = "Set the channel output. O0CPRE signal is forced high when the counter is equals to the output compare register TIMERx_CH0CV."]
+            #[inline(always)]
+            pub fn is_mode1(&self) -> bool {
+                *self == Ch0comctl::Mode1
+            }
+            #[doc = "Clear the channel output. O0CPRE signal is forced low when the counter is equals to the output compare register TIMERx_CH0CV."]
+            #[inline(always)]
+            pub fn is_mode2(&self) -> bool {
+                *self == Ch0comctl::Mode2
+            }
+            #[doc = "Toggle on match. O0CPRE toggles when the counter is equals to the output compare register TIMERx_CH0CV."]
+            #[inline(always)]
+            pub fn is_mode3(&self) -> bool {
+                *self == Ch0comctl::Mode3
+            }
+            #[doc = "Force low. O0CPRE is forced to low level."]
+            #[inline(always)]
+            pub fn is_mode4(&self) -> bool {
+                *self == Ch0comctl::Mode4
+            }
+            #[doc = "Force high. O0CPRE is forced to high level."]
+            #[inline(always)]
+            pub fn is_mode5(&self) -> bool {
+                *self == Ch0comctl::Mode5
+            }
+            #[doc = "PWM mode0. When counting up, O0CPRE is high when the counter is smaller than TIMERx_CH0CV, and low otherwise. When counting down, O0CPRE is low when the counter is larger than TIMERx_CH0CV, and high otherwise."]
+            #[inline(always)]
+            pub fn is_pwmmode0(&self) -> bool {
+                *self == Ch0comctl::Pwmmode0
+            }
+            #[doc = "PWM mode1. When counting up, O0CPRE is low when the counter is smaller than TIMERx_CH0CV, and high otherwise. When counting down, O0CPRE is high when the counter is larger than TIMERx_CH0CV, and low otherwise."]
+            #[inline(always)]
+            pub fn is_pwmmode1(&self) -> bool {
+                *self == Ch0comctl::Pwmmode1
+            }
+        }
         #[doc = "Field `CH0COMCTL` writer - Channel 0 compare output control"]
-        pub type Ch0comctlW<'a, REG> = crate::FieldWriter<'a, REG, 3>;
+        pub type Ch0comctlW<'a, REG> = crate::FieldWriter<'a, REG, 3, Ch0comctl, crate::Safe>;
+        impl<'a, REG> Ch0comctlW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "Timing mode. The O0CPRE signal keeps stable, independent of the comparison between the register TIMERx_CH0CV and the counter TIMERx_CNT."]
+            #[inline(always)]
+            pub fn mode0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Mode0)
+            }
+            #[doc = "Set the channel output. O0CPRE signal is forced high when the counter is equals to the output compare register TIMERx_CH0CV."]
+            #[inline(always)]
+            pub fn mode1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Mode1)
+            }
+            #[doc = "Clear the channel output. O0CPRE signal is forced low when the counter is equals to the output compare register TIMERx_CH0CV."]
+            #[inline(always)]
+            pub fn mode2(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Mode2)
+            }
+            #[doc = "Toggle on match. O0CPRE toggles when the counter is equals to the output compare register TIMERx_CH0CV."]
+            #[inline(always)]
+            pub fn mode3(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Mode3)
+            }
+            #[doc = "Force low. O0CPRE is forced to low level."]
+            #[inline(always)]
+            pub fn mode4(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Mode4)
+            }
+            #[doc = "Force high. O0CPRE is forced to high level."]
+            #[inline(always)]
+            pub fn mode5(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Mode5)
+            }
+            #[doc = "PWM mode0. When counting up, O0CPRE is high when the counter is smaller than TIMERx_CH0CV, and low otherwise. When counting down, O0CPRE is low when the counter is larger than TIMERx_CH0CV, and high otherwise."]
+            #[inline(always)]
+            pub fn pwmmode0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Pwmmode0)
+            }
+            #[doc = "PWM mode1. When counting up, O0CPRE is low when the counter is smaller than TIMERx_CH0CV, and high otherwise. When counting down, O0CPRE is high when the counter is larger than TIMERx_CH0CV, and low otherwise."]
+            #[inline(always)]
+            pub fn pwmmode1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comctl::Pwmmode1)
+            }
+        }
+        #[doc = "Channel 0 output compare clear enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch0comcen {
+            #[doc = "0: Channel 0 output compare clear disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 0 compare clear enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch0comcen> for bool {
+            #[inline(always)]
+            fn from(variant: Ch0comcen) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH0COMCEN` reader - Channel 0 output compare clear enable"]
-        pub type Ch0comcenR = crate::BitReader;
+        pub type Ch0comcenR = crate::BitReader<Ch0comcen>;
+        impl Ch0comcenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch0comcen {
+                match self.bits {
+                    false => Ch0comcen::Disabled,
+                    true => Ch0comcen::Enabled,
+                }
+            }
+            #[doc = "Channel 0 output compare clear disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch0comcen::Disabled
+            }
+            #[doc = "Channel 0 compare clear enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch0comcen::Enabled
+            }
+        }
         #[doc = "Field `CH0COMCEN` writer - Channel 0 output compare clear enable"]
-        pub type Ch0comcenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch0comcenW<'a, REG> = crate::BitWriter<'a, REG, Ch0comcen>;
+        impl<'a, REG> Ch0comcenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 0 output compare clear disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comcen::Disabled)
+            }
+            #[doc = "Channel 0 compare clear enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch0comcen::Enabled)
+            }
+        }
+        #[doc = "Channel 1 mode selection\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Ch1ms {
+            #[doc = "0: Channel 1 output mode."]
+            Output = 0,
+            #[doc = "1: Channel 1 is programmed as input mode, IS1 is connected to CI1FE1"]
+            InputCi1 = 1,
+            #[doc = "2: Channel 1 is programmed as input mode, IS1 is connected to CI0FE1"]
+            InputCi0 = 2,
+            #[doc = "3: Channel 1 is programmed as input mode, IS1 is connected to ITS"]
+            InputIts = 3,
+        }
+        impl From<Ch1ms> for u8 {
+            #[inline(always)]
+            fn from(variant: Ch1ms) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Ch1ms {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Ch1ms {}
         #[doc = "Field `CH1MS` reader - Channel 1 mode selection"]
-        pub type Ch1msR = crate::FieldReader;
+        pub type Ch1msR = crate::FieldReader<Ch1ms>;
+        impl Ch1msR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1ms {
+                match self.bits {
+                    0 => Ch1ms::Output,
+                    1 => Ch1ms::InputCi1,
+                    2 => Ch1ms::InputCi0,
+                    3 => Ch1ms::InputIts,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Channel 1 output mode."]
+            #[inline(always)]
+            pub fn is_output(&self) -> bool {
+                *self == Ch1ms::Output
+            }
+            #[doc = "Channel 1 is programmed as input mode, IS1 is connected to CI1FE1"]
+            #[inline(always)]
+            pub fn is_input_ci1(&self) -> bool {
+                *self == Ch1ms::InputCi1
+            }
+            #[doc = "Channel 1 is programmed as input mode, IS1 is connected to CI0FE1"]
+            #[inline(always)]
+            pub fn is_input_ci0(&self) -> bool {
+                *self == Ch1ms::InputCi0
+            }
+            #[doc = "Channel 1 is programmed as input mode, IS1 is connected to ITS"]
+            #[inline(always)]
+            pub fn is_input_its(&self) -> bool {
+                *self == Ch1ms::InputIts
+            }
+        }
         #[doc = "Field `CH1MS` writer - Channel 1 mode selection"]
-        pub type Ch1msW<'a, REG> = crate::FieldWriter<'a, REG, 2>;
+        pub type Ch1msW<'a, REG> = crate::FieldWriter<'a, REG, 2, Ch1ms, crate::Safe>;
+        impl<'a, REG> Ch1msW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "Channel 1 output mode."]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1ms::Output)
+            }
+            #[doc = "Channel 1 is programmed as input mode, IS1 is connected to CI1FE1"]
+            #[inline(always)]
+            pub fn input_ci1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1ms::InputCi1)
+            }
+            #[doc = "Channel 1 is programmed as input mode, IS1 is connected to CI0FE1"]
+            #[inline(always)]
+            pub fn input_ci0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1ms::InputCi0)
+            }
+            #[doc = "Channel 1 is programmed as input mode, IS1 is connected to ITS"]
+            #[inline(always)]
+            pub fn input_its(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1ms::InputIts)
+            }
+        }
+        #[doc = "Channel 1 output compare fast enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1comfen {
+            #[doc = "0: Channel 1 output compare fast disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 1 compare fast enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch1comfen> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1comfen) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1COMFEN` reader - Channel 1 output compare fast enable"]
-        pub type Ch1comfenR = crate::BitReader;
+        pub type Ch1comfenR = crate::BitReader<Ch1comfen>;
+        impl Ch1comfenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1comfen {
+                match self.bits {
+                    false => Ch1comfen::Disabled,
+                    true => Ch1comfen::Enabled,
+                }
+            }
+            #[doc = "Channel 1 output compare fast disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch1comfen::Disabled
+            }
+            #[doc = "Channel 1 compare fast enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch1comfen::Enabled
+            }
+        }
         #[doc = "Field `CH1COMFEN` writer - Channel 1 output compare fast enable"]
-        pub type Ch1comfenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1comfenW<'a, REG> = crate::BitWriter<'a, REG, Ch1comfen>;
+        impl<'a, REG> Ch1comfenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 1 output compare fast disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comfen::Disabled)
+            }
+            #[doc = "Channel 1 compare fast enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comfen::Enabled)
+            }
+        }
+        #[doc = "Channel 1 output compare shadow enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1comsen {
+            #[doc = "0: Channel 1 output compare shadow disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 1 compare shadow enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch1comsen> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1comsen) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1COMSEN` reader - Channel 1 output compare shadow enable"]
-        pub type Ch1comsenR = crate::BitReader;
+        pub type Ch1comsenR = crate::BitReader<Ch1comsen>;
+        impl Ch1comsenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1comsen {
+                match self.bits {
+                    false => Ch1comsen::Disabled,
+                    true => Ch1comsen::Enabled,
+                }
+            }
+            #[doc = "Channel 1 output compare shadow disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch1comsen::Disabled
+            }
+            #[doc = "Channel 1 compare shadow enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch1comsen::Enabled
+            }
+        }
         #[doc = "Field `CH1COMSEN` writer - Channel 1 output compare shadow enable"]
-        pub type Ch1comsenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1comsenW<'a, REG> = crate::BitWriter<'a, REG, Ch1comsen>;
+        impl<'a, REG> Ch1comsenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 1 output compare shadow disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comsen::Disabled)
+            }
+            #[doc = "Channel 1 compare shadow enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comsen::Enabled)
+            }
+        }
+        #[doc = "Channel 1 compare output control\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        #[repr(u8)]
+        pub enum Ch1comctl {
+            #[doc = "0: Timing mode. The O1CPRE signal keeps stable, independent of the comparison between the register TIMERx_CH1CV and the counter TIMERx_CNT."]
+            Mode0 = 0,
+            #[doc = "1: Set the channel output. O1CPRE signal is forced high when the counter is equals to the output compare register TIMERx_CH1CV."]
+            Mode1 = 1,
+            #[doc = "2: Clear the channel output. O1CPRE signal is forced low when the counter is equals to the output compare register TIMERx_CH1CV."]
+            Mode2 = 2,
+            #[doc = "3: Toggle on match. O1CPRE toggles when the counter is equals to the output compare register TIMERx_CH1CV."]
+            Mode3 = 3,
+            #[doc = "4: Force low. O1CPRE is forced to low level."]
+            Mode4 = 4,
+            #[doc = "5: Force high. O1CPRE is forced to high level."]
+            Mode5 = 5,
+            #[doc = "6: PWM mode0. When counting up, O1CPRE is high when the counter is smaller than TIMERx_CH1CV, and low otherwise. When counting down, O1CPRE is low when the counter is larger than TIMERx_CH1CV, and high otherwise."]
+            Pwmmode0 = 6,
+            #[doc = "7: PWM mode1. When counting up, O1CPRE is low when the counter is smaller than TIMERx_CH1CV, and high otherwise. When counting down, O1CPRE is high when the counter is larger than TIMERx_CH1CV, and low otherwise."]
+            Pwmmode1 = 7,
+        }
+        impl From<Ch1comctl> for u8 {
+            #[inline(always)]
+            fn from(variant: Ch1comctl) -> Self {
+                variant as _
+            }
+        }
+        impl crate::FieldSpec for Ch1comctl {
+            type Ux = u8;
+        }
+        impl crate::IsEnum for Ch1comctl {}
         #[doc = "Field `CH1COMCTL` reader - Channel 1 compare output control"]
-        pub type Ch1comctlR = crate::FieldReader;
+        pub type Ch1comctlR = crate::FieldReader<Ch1comctl>;
+        impl Ch1comctlR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1comctl {
+                match self.bits {
+                    0 => Ch1comctl::Mode0,
+                    1 => Ch1comctl::Mode1,
+                    2 => Ch1comctl::Mode2,
+                    3 => Ch1comctl::Mode3,
+                    4 => Ch1comctl::Mode4,
+                    5 => Ch1comctl::Mode5,
+                    6 => Ch1comctl::Pwmmode0,
+                    7 => Ch1comctl::Pwmmode1,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Timing mode. The O1CPRE signal keeps stable, independent of the comparison between the register TIMERx_CH1CV and the counter TIMERx_CNT."]
+            #[inline(always)]
+            pub fn is_mode0(&self) -> bool {
+                *self == Ch1comctl::Mode0
+            }
+            #[doc = "Set the channel output. O1CPRE signal is forced high when the counter is equals to the output compare register TIMERx_CH1CV."]
+            #[inline(always)]
+            pub fn is_mode1(&self) -> bool {
+                *self == Ch1comctl::Mode1
+            }
+            #[doc = "Clear the channel output. O1CPRE signal is forced low when the counter is equals to the output compare register TIMERx_CH1CV."]
+            #[inline(always)]
+            pub fn is_mode2(&self) -> bool {
+                *self == Ch1comctl::Mode2
+            }
+            #[doc = "Toggle on match. O1CPRE toggles when the counter is equals to the output compare register TIMERx_CH1CV."]
+            #[inline(always)]
+            pub fn is_mode3(&self) -> bool {
+                *self == Ch1comctl::Mode3
+            }
+            #[doc = "Force low. O1CPRE is forced to low level."]
+            #[inline(always)]
+            pub fn is_mode4(&self) -> bool {
+                *self == Ch1comctl::Mode4
+            }
+            #[doc = "Force high. O1CPRE is forced to high level."]
+            #[inline(always)]
+            pub fn is_mode5(&self) -> bool {
+                *self == Ch1comctl::Mode5
+            }
+            #[doc = "PWM mode0. When counting up, O1CPRE is high when the counter is smaller than TIMERx_CH1CV, and low otherwise. When counting down, O1CPRE is low when the counter is larger than TIMERx_CH1CV, and high otherwise."]
+            #[inline(always)]
+            pub fn is_pwmmode0(&self) -> bool {
+                *self == Ch1comctl::Pwmmode0
+            }
+            #[doc = "PWM mode1. When counting up, O1CPRE is low when the counter is smaller than TIMERx_CH1CV, and high otherwise. When counting down, O1CPRE is high when the counter is larger than TIMERx_CH1CV, and low otherwise."]
+            #[inline(always)]
+            pub fn is_pwmmode1(&self) -> bool {
+                *self == Ch1comctl::Pwmmode1
+            }
+        }
         #[doc = "Field `CH1COMCTL` writer - Channel 1 compare output control"]
-        pub type Ch1comctlW<'a, REG> = crate::FieldWriter<'a, REG, 3>;
+        pub type Ch1comctlW<'a, REG> = crate::FieldWriter<'a, REG, 3, Ch1comctl, crate::Safe>;
+        impl<'a, REG> Ch1comctlW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+            REG::Ux: From<u8>,
+        {
+            #[doc = "Timing mode. The O1CPRE signal keeps stable, independent of the comparison between the register TIMERx_CH1CV and the counter TIMERx_CNT."]
+            #[inline(always)]
+            pub fn mode0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Mode0)
+            }
+            #[doc = "Set the channel output. O1CPRE signal is forced high when the counter is equals to the output compare register TIMERx_CH1CV."]
+            #[inline(always)]
+            pub fn mode1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Mode1)
+            }
+            #[doc = "Clear the channel output. O1CPRE signal is forced low when the counter is equals to the output compare register TIMERx_CH1CV."]
+            #[inline(always)]
+            pub fn mode2(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Mode2)
+            }
+            #[doc = "Toggle on match. O1CPRE toggles when the counter is equals to the output compare register TIMERx_CH1CV."]
+            #[inline(always)]
+            pub fn mode3(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Mode3)
+            }
+            #[doc = "Force low. O1CPRE is forced to low level."]
+            #[inline(always)]
+            pub fn mode4(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Mode4)
+            }
+            #[doc = "Force high. O1CPRE is forced to high level."]
+            #[inline(always)]
+            pub fn mode5(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Mode5)
+            }
+            #[doc = "PWM mode0. When counting up, O1CPRE is high when the counter is smaller than TIMERx_CH1CV, and low otherwise. When counting down, O1CPRE is low when the counter is larger than TIMERx_CH1CV, and high otherwise."]
+            #[inline(always)]
+            pub fn pwmmode0(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Pwmmode0)
+            }
+            #[doc = "PWM mode1. When counting up, O1CPRE is low when the counter is smaller than TIMERx_CH1CV, and high otherwise. When counting down, O1CPRE is high when the counter is larger than TIMERx_CH1CV, and low otherwise."]
+            #[inline(always)]
+            pub fn pwmmode1(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comctl::Pwmmode1)
+            }
+        }
+        #[doc = "Channel 1 output compare clear enable\n\nValue on reset: 0"]
+        #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+        pub enum Ch1comcen {
+            #[doc = "0: Channel 1 output compare clear disabled."]
+            Disabled = 0,
+            #[doc = "1: Channel 1 compare clear enabled."]
+            Enabled = 1,
+        }
+        impl From<Ch1comcen> for bool {
+            #[inline(always)]
+            fn from(variant: Ch1comcen) -> Self {
+                variant as u8 != 0
+            }
+        }
         #[doc = "Field `CH1COMCEN` reader - Channel 1 output compare clear enable"]
-        pub type Ch1comcenR = crate::BitReader;
+        pub type Ch1comcenR = crate::BitReader<Ch1comcen>;
+        impl Ch1comcenR {
+            #[doc = "Get enumerated values variant"]
+            #[inline(always)]
+            pub const fn variant(&self) -> Ch1comcen {
+                match self.bits {
+                    false => Ch1comcen::Disabled,
+                    true => Ch1comcen::Enabled,
+                }
+            }
+            #[doc = "Channel 1 output compare clear disabled."]
+            #[inline(always)]
+            pub fn is_disabled(&self) -> bool {
+                *self == Ch1comcen::Disabled
+            }
+            #[doc = "Channel 1 compare clear enabled."]
+            #[inline(always)]
+            pub fn is_enabled(&self) -> bool {
+                *self == Ch1comcen::Enabled
+            }
+        }
         #[doc = "Field `CH1COMCEN` writer - Channel 1 output compare clear enable"]
-        pub type Ch1comcenW<'a, REG> = crate::BitWriter<'a, REG>;
+        pub type Ch1comcenW<'a, REG> = crate::BitWriter<'a, REG, Ch1comcen>;
+        impl<'a, REG> Ch1comcenW<'a, REG>
+        where
+            REG: crate::Writable + crate::RegisterSpec,
+        {
+            #[doc = "Channel 1 output compare clear disabled."]
+            #[inline(always)]
+            pub fn disabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comcen::Disabled)
+            }
+            #[doc = "Channel 1 compare clear enabled."]
+            #[inline(always)]
+            pub fn enabled(self) -> &'a mut crate::W<REG> {
+                self.variant(Ch1comcen::Enabled)
+            }
+        }
         impl R {
             #[doc = "Bits 0:1 - Channel 0 I/O mode selection"]
             #[inline(always)]
@@ -94858,68 +97349,68 @@ pub mod timer1 {
         impl W {
             #[doc = "Bits 0:1 - Channel 0 I/O mode selection"]
             #[inline(always)]
-            pub fn ch0ms(&mut self) -> Ch0msW<Chctl0OutputSpec> {
+            pub fn ch0ms(&mut self) -> Ch0msW<Chctl0Spec> {
                 Ch0msW::new(self, 0)
             }
             #[doc = "Bit 2 - Channel 0 output compare fast enable"]
             #[inline(always)]
-            pub fn ch0comfen(&mut self) -> Ch0comfenW<Chctl0OutputSpec> {
+            pub fn ch0comfen(&mut self) -> Ch0comfenW<Chctl0Spec> {
                 Ch0comfenW::new(self, 2)
             }
             #[doc = "Bit 3 - Channel 0 compare output shadow enable"]
             #[inline(always)]
-            pub fn ch0comsen(&mut self) -> Ch0comsenW<Chctl0OutputSpec> {
+            pub fn ch0comsen(&mut self) -> Ch0comsenW<Chctl0Spec> {
                 Ch0comsenW::new(self, 3)
             }
             #[doc = "Bits 4:6 - Channel 0 compare output control"]
             #[inline(always)]
-            pub fn ch0comctl(&mut self) -> Ch0comctlW<Chctl0OutputSpec> {
+            pub fn ch0comctl(&mut self) -> Ch0comctlW<Chctl0Spec> {
                 Ch0comctlW::new(self, 4)
             }
             #[doc = "Bit 7 - Channel 0 output compare clear enable"]
             #[inline(always)]
-            pub fn ch0comcen(&mut self) -> Ch0comcenW<Chctl0OutputSpec> {
+            pub fn ch0comcen(&mut self) -> Ch0comcenW<Chctl0Spec> {
                 Ch0comcenW::new(self, 7)
             }
             #[doc = "Bits 8:9 - Channel 1 mode selection"]
             #[inline(always)]
-            pub fn ch1ms(&mut self) -> Ch1msW<Chctl0OutputSpec> {
+            pub fn ch1ms(&mut self) -> Ch1msW<Chctl0Spec> {
                 Ch1msW::new(self, 8)
             }
             #[doc = "Bit 10 - Channel 1 output compare fast enable"]
             #[inline(always)]
-            pub fn ch1comfen(&mut self) -> Ch1comfenW<Chctl0OutputSpec> {
+            pub fn ch1comfen(&mut self) -> Ch1comfenW<Chctl0Spec> {
                 Ch1comfenW::new(self, 10)
             }
             #[doc = "Bit 11 - Channel 1 output compare shadow enable"]
             #[inline(always)]
-            pub fn ch1comsen(&mut self) -> Ch1comsenW<Chctl0OutputSpec> {
+            pub fn ch1comsen(&mut self) -> Ch1comsenW<Chctl0Spec> {
                 Ch1comsenW::new(self, 11)
             }
             #[doc = "Bits 12:14 - Channel 1 compare output control"]
             #[inline(always)]
-            pub fn ch1comctl(&mut self) -> Ch1comctlW<Chctl0OutputSpec> {
+            pub fn ch1comctl(&mut self) -> Ch1comctlW<Chctl0Spec> {
                 Ch1comctlW::new(self, 12)
             }
             #[doc = "Bit 15 - Channel 1 output compare clear enable"]
             #[inline(always)]
-            pub fn ch1comcen(&mut self) -> Ch1comcenW<Chctl0OutputSpec> {
+            pub fn ch1comcen(&mut self) -> Ch1comcenW<Chctl0Spec> {
                 Ch1comcenW::new(self, 15)
             }
         }
-        #[doc = "Channel control register 0 (output mode)\n\nYou can [`read`](crate::Reg::read) this register and get [`chctl0_output::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`chctl0_output::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
-        pub struct Chctl0OutputSpec;
-        impl crate::RegisterSpec for Chctl0OutputSpec {
+        #[doc = "Channel control register 0 (output mode)\n\nYou can [`read`](crate::Reg::read) this register and get [`chctl0::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`chctl0::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+        pub struct Chctl0Spec;
+        impl crate::RegisterSpec for Chctl0Spec {
             type Ux = u32;
         }
-        #[doc = "`read()` method returns [`chctl0_output::R`](R) reader structure"]
-        impl crate::Readable for Chctl0OutputSpec {}
-        #[doc = "`write(|w| ..)` method takes [`chctl0_output::W`](W) writer structure"]
-        impl crate::Writable for Chctl0OutputSpec {
+        #[doc = "`read()` method returns [`chctl0::R`](R) reader structure"]
+        impl crate::Readable for Chctl0Spec {}
+        #[doc = "`write(|w| ..)` method takes [`chctl0::W`](W) writer structure"]
+        impl crate::Writable for Chctl0Spec {
             type Safety = crate::Unsafe;
         }
-        #[doc = "`reset()` method sets CHCTL0_Output to value 0"]
-        impl crate::Resettable for Chctl0OutputSpec {}
+        #[doc = "`reset()` method sets CHCTL0 to value 0"]
+        impl crate::Resettable for Chctl0Spec {}
     }
     #[doc = "CHCTL0_Input (rw) register accessor: Channel control register 0 (input mode)\n\nYou can [`read`](crate::Reg::read) this register and get [`chctl0_input::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`chctl0_input::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@chctl0_input`] module"]
     #[doc(alias = "CHCTL0_Input")]
